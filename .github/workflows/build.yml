@@ -1,0 +1,55 @@
+name: build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Checkout Hadris
+        uses: actions/checkout@v6
+        with:
+          # see https://github.com/hxyulin/hadris/tags
+          repository: hxyulin/hadris
+          ref: hadris-iso-cli-v1.0.1
+          path: hadris
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          target: wasm32-wasip1
+          toolchain: 1.93.1
+          components: rust-src
+      - name: Enable caching
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        working-directory: hadris/crates/hadris-iso-cli
+        run: cargo build --package hadris-iso-cli --release --target wasm32-wasip1
+      - name: Archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifacts
+          path: hadris/target/wasm32-wasip1/release/hadris-iso-cli.wasm
+  release:
+    if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
+    name: Release
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: hadris-iso-cli.wasm
+          token: ${{ secrets.GITHUB_TOKEN }}
