@@ -17,13 +17,13 @@ jobs:
         with:
           # see https://github.com/hxyulin/hadris/tags
           repository: hxyulin/hadris
-          ref: hadris-iso-cli-v1.0.1
+          ref: 274bfa7062979fe27bc24d747a947081558519dd # 2026-03-19T00:14:01.000Z
           path: hadris
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@v1
         with:
           target: wasm32-wasip1
-          toolchain: 1.93.1
+          toolchain: 1.94.0
           components: rust-src
       - name: Enable caching
         uses: Swatinem/rust-cache@v2
