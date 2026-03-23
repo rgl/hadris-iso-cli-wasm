@@ -28,9 +28,34 @@ wazero run \
     create \
     --joliet \
     --rock-ridge \
-    --volume-name CIDATA \
+    --volume-name cidata \
+    --volume-set-id "example volume set" \
+    --preparer-id "example preparer" \
+    --publisher-id "example publisher" \
+    --application-id "example application" \
+    --system-id "example system" \
     --output cidata.iso \
     cidata
+```
+
+Show information about the example iso file:
+
+```bash
+wazero run \
+    -mount .:ro \
+    hadris-iso-cli.wasm \
+    info \
+    cidata.iso
+wazero run \
+    -mount .:ro \
+    hadris-iso-cli.wasm \
+    tree \
+    cidata.iso
+wazero run \
+    -mount .:ro \
+    hadris-iso-cli.wasm \
+    ls --long \
+    cidata.iso
 ```
 
 Build an example iso using wasmtime:
@@ -42,9 +67,34 @@ wasmtime run \
     create \
     --joliet \
     --rock-ridge \
-    --volume-name CIDATA \
+    --volume-name cidata \
+    --volume-set-id "example volume set" \
+    --preparer-id "example preparer" \
+    --publisher-id "example publisher" \
+    --application-id "example application" \
+    --system-id "example system" \
     --output cidata.iso \
     cidata
+```
+
+Show information about the example iso file:
+
+```bash
+wasmtime run \
+    --dir . \
+    hadris-iso-cli.wasm \
+    info \
+    cidata.iso
+wasmtime run \
+    --dir . \
+    hadris-iso-cli.wasm \
+    tree \
+    cidata.iso
+wasmtime run \
+    --dir . \
+    hadris-iso-cli.wasm \
+    ls --long \
+    cidata.iso
 ```
 
 ## Develop
@@ -64,7 +114,7 @@ Build:
 ```bash
 git clone https://github.com/hxyulin/hadris
 cd hadris/crates/hadris-iso-cli
-# build the asm flavor.
+# build the wasm flavor.
 cargo build \
     --package hadris-iso-cli  \
     --release \
@@ -92,7 +142,12 @@ For reference, build an example iso using xorriso:
 xorriso \
     -as genisoimage \
     -output cidata-xorriso.iso \
-    -volid CIDATA \
+    -volid cidata \
+    -volset "example volume set" \
+    -preparer "example preparer" \
+    -publisher "example publisher" \
+    -appid "example application" \
+    -sysid "example system" \
     -joliet \
     -rock \
     cidata
@@ -103,6 +158,14 @@ xorriso \
     -dev cidata-xorriso.iso \
     -find / \
     -type f
+wazero run \
+    -mount .:ro \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    info \
+    cidata-xorriso.iso
+iso-info \
+    --no-header \
+    --input cidata-xorriso.iso
 7z l cidata-xorriso.iso
 ```
 
@@ -113,9 +176,17 @@ For reference, build an example iso using native hadris-iso-cli:
     create \
     --joliet \
     --rock-ridge \
-    --volume-name CIDATA \
+    --volume-name cidata \
+    --volume-set-id "example volume set" \
+    --preparer-id "example preparer" \
+    --publisher-id "example publisher" \
+    --application-id "example application" \
+    --system-id "example system" \
     --output cidata-native.iso \
     cidata
+../../target/release/hadris-iso-cli \
+    info \
+    cidata-native.iso
 xorriso \
     -dev cidata-native.iso \
     -toc
@@ -123,6 +194,10 @@ xorriso \
     -dev cidata-native.iso \
     -find / \
     -type f
+iso-info \
+    --no-header \
+    --input cidata-native.iso
+7z l cidata-native.iso
 ```
 
 Build an example iso using wazero:
@@ -134,9 +209,29 @@ wazero run \
     create \
     --joliet \
     --rock-ridge \
-    --volume-name CIDATA \
+    --volume-name cidata \
+    --volume-set-id "example volume set" \
+    --preparer-id "example preparer" \
+    --publisher-id "example publisher" \
+    --application-id "example application" \
+    --system-id "example system" \
     --output cidata.iso \
     cidata
+wazero run \
+    -mount .:ro \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    info \
+    cidata.iso
+wazero run \
+    -mount .:ro \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    tree \
+    cidata.iso
+wazero run \
+    -mount .:ro \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ls --long \
+    cidata.iso
 xorriso \
     -dev cidata.iso \
     -toc
@@ -144,6 +239,10 @@ xorriso \
     -dev cidata.iso \
     -find / \
     -type f
+iso-info \
+    --no-header \
+    --input cidata.iso
+7z l cidata.iso
 ```
 
 Build an example iso using wasmtime:
@@ -155,9 +254,29 @@ wasmtime run \
     create \
     --joliet \
     --rock-ridge \
-    --volume-name CIDATA \
+    --volume-name cidata \
+    --volume-set-id "example volume set" \
+    --preparer-id "example preparer" \
+    --publisher-id "example publisher" \
+    --application-id "example application" \
+    --system-id "example system" \
     --output cidata-wasmtime.iso \
     cidata
+wasmtime run \
+    --dir . \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    info \
+    cidata-wasmtime.iso
+wasmtime run \
+    --dir . \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    tree \
+    cidata-wasmtime.iso
+wasmtime run \
+    --dir . \
+    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ls --long \
+    cidata-wasmtime.iso
 xorriso \
     -dev cidata-wasmtime.iso \
     -toc
@@ -165,4 +284,8 @@ xorriso \
     -dev cidata-wasmtime.iso \
     -find / \
     -type f
+iso-info \
+    --no-header \
+    --input cidata-wasmtime.iso
+7z l cidata-wasmtime.iso
 ```

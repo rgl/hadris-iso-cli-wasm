@@ -35,6 +35,7 @@ apt-get -y install --no-install-recommends \
     7zip \
     bash-completion \
     curl \
+    libcdio-utils \
     sudo \
     unzip \
     wget \
