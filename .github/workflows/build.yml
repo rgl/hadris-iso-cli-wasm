@@ -27,6 +27,16 @@ jobs:
           components: rust-src
       - name: Enable caching
         uses: Swatinem/rust-cache@v2
+      - name: Set version
+        working-directory: hadris
+        run: |
+          set -eux
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="$(echo "${GITHUB_REF_NAME}" | sed 's/^v//')"
+          else
+            VERSION="0.0.0+${GITHUB_SHA:0:7}"
+          fi
+          perl -pi -e "s/^version(\.workspace)?\s*=.*/version = \"$VERSION\"/" crates/hadris-iso-cli/Cargo.toml
       - name: Build
         working-directory: hadris/crates/hadris-iso-cli
         run: cargo build --package hadris-iso-cli --release --target wasm32-wasip1
