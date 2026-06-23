@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.23
+# syntax=docker.io/docker/dockerfile:1.25
 # shellcheck shell=bash
 
 # see https://github.com/rust-lang/rustup/tags/
@@ -7,24 +7,24 @@ ARG RUSTUP_INIT_VERSION='1.29.0'
 
 # see https://github.com/cargo-bins/cargo-binstall/releases
 # renovate: datasource=github-releases depName=cargo-bins/cargo-binstall
-ARG CARGO_BINSTALL_VERSION='1.18.1'
+ARG CARGO_BINSTALL_VERSION='1.20.1'
 
 # see https://github.com/rust-lang/rust/releases
 # renovate: datasource=github-tags depName=rust-lang/rust
-ARG RUST_VERSION='1.95.0'
+ARG RUST_VERSION='1.96.0'
 
 # see https://github.com/bytecodealliance/wasmtime/releases
 # see https://crates.io/crates/wasmtime-cli
 # renovate: datasource=github-releases depName=bytecodealliance/wasmtime
-ARG WASMTIME_CLI_VERSION='44.0.1'
+ARG WASMTIME_CLI_VERSION='45.0.2'
 
 # see https://github.com/wazero/wazero/releases
 # renovate: datasource=github-releases depName=wazero/wazero
-ARG WAZERO_VERSION='1.11.0'
+ARG WAZERO_VERSION='1.12.0'
 
 # see https://github.com/devcontainers/images/blob/main/src/base-debian/manifest.json
 # see https://github.com/devcontainers/images/tree/main/src/base-debian/history
-FROM mcr.microsoft.com/devcontainers/base:2.1.8-trixie
+FROM mcr.microsoft.com/devcontainers/base:2.1.10-trixie
 
 RUN <<'EOF'
 #!/usr/bin/bash
