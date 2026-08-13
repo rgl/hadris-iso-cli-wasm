@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/rgl/hadris-iso-cli-wasm/actions/workflows/build.yml/badge.svg)](https://github.com/rgl/hadris-iso-cli-wasm/actions/workflows/build.yml)
 
-This builds and releases the [hadris-iso-cli application](https://github.com/hxyulin/hadris/tree/main/crates/hadris-iso-cli) as a [wasm binary](https://github.com/rgl/hadris-iso-cli-wasm/releases).
+This builds and releases the [hadris-iso-cli application](https://github.com/hxyulin/hadris/tree/v2.0.0/crates/tools/hadris-iso-cli) as a [wasm binary](https://github.com/rgl/hadris-iso-cli-wasm/releases).
 
 ## Use
 
@@ -112,19 +112,27 @@ Open `bash` inside the Visual Studio Code Terminal.
 Build:
 
 ```bash
+# checkout hadris.
 git clone https://github.com/hxyulin/hadris
-cd hadris/crates/hadris-iso-cli
+cd hadris
+git checkout v2.0.0 # 2026-08-09T03:03:36Z
+# use the installed rust version.
+rm rust-toolchain.toml
+RUST_VERSION="$(rustc --version | perl -nle 'print $1 if /^rustc (\S+)/')"
+perl -pi -e "s/^rust-version\s*=.*/rust-version = \"$RUST_VERSION\"/" Cargo.toml
+git --no-pager diff
 # build the wasm flavor.
+cd crates/tools/hadris-iso-cli
 cargo build \
     --package hadris-iso-cli  \
     --release \
     --target wasm32-wasip1
-ls -laF ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm
+ls -laF ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm
 # for reference, build the native flavor.
 cargo build \
     --package hadris-iso-cli  \
     --release
-ls -laF ../../target/release/hadris-iso-cli
+ls -laF ../../../target/release/hadris-iso-cli
 ```
 
 Build an example iso content tree:
@@ -160,8 +168,18 @@ xorriso \
     -type f
 wazero run \
     -mount .:ro \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     info \
+    cidata-xorriso.iso
+wazero run \
+    -mount .:ro \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    tree \
+    cidata-xorriso.iso
+wazero run \
+    -mount .:ro \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ls --long \
     cidata-xorriso.iso
 iso-info \
     --no-header \
@@ -172,7 +190,7 @@ iso-info \
 For reference, build an example iso using native hadris-iso-cli:
 
 ```bash
-../../target/release/hadris-iso-cli \
+../../../target/release/hadris-iso-cli \
     create \
     --joliet \
     --rock-ridge \
@@ -184,8 +202,14 @@ For reference, build an example iso using native hadris-iso-cli:
     --system-id "example system" \
     --output cidata-native.iso \
     cidata
-../../target/release/hadris-iso-cli \
+../../../target/release/hadris-iso-cli \
     info \
+    cidata-native.iso
+../../../target/release/hadris-iso-cli \
+    tree \
+    cidata-native.iso
+../../../target/release/hadris-iso-cli \
+    ls --long \
     cidata-native.iso
 xorriso \
     -dev cidata-native.iso \
@@ -205,7 +229,7 @@ Build an example iso using wazero:
 ```bash
 wazero run \
     -mount . \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     create \
     --joliet \
     --rock-ridge \
@@ -219,17 +243,17 @@ wazero run \
     cidata
 wazero run \
     -mount .:ro \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     info \
     cidata.iso
 wazero run \
     -mount .:ro \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     tree \
     cidata.iso
 wazero run \
     -mount .:ro \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     ls --long \
     cidata.iso
 xorriso \
@@ -250,7 +274,7 @@ Build an example iso using wasmtime:
 ```bash
 wasmtime run \
     --dir . \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     create \
     --joliet \
     --rock-ridge \
@@ -264,17 +288,17 @@ wasmtime run \
     cidata
 wasmtime run \
     --dir . \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     info \
     cidata-wasmtime.iso
 wasmtime run \
     --dir . \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     tree \
     cidata-wasmtime.iso
 wasmtime run \
     --dir . \
-    ../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
+    ../../../target/wasm32-wasip1/release/hadris-iso-cli.wasm \
     ls --long \
     cidata-wasmtime.iso
 xorriso \

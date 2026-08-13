@@ -8,26 +8,38 @@ env:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Checkout Hadris
-        uses: actions/checkout@v7
-        with:
-          # see https://github.com/hxyulin/hadris/tags
-          repository: hxyulin/hadris
-          ref: v1.2.0 # 2026-06-13T09:35:54Z
-          path: hadris
       - name: Setup Rust
+        id: setup-rust
         uses: dtolnay/rust-toolchain@v1
         with:
           target: wasm32-wasip1
-          toolchain: 1.96.0
-          components: rust-src
-      - name: Enable caching
-        uses: Swatinem/rust-cache@v2
-      - name: Set version
+          toolchain: 1.97.1
+          components: clippy, rustfmt
+      - name: Checkout Hadris
+        uses: actions/checkout@v7
+        with:
+          # see https://github.com/hxyulin/hadris/releases
+          repository: hxyulin/hadris
+          ref: v2.0.0 # 2026-08-09T03:03:36Z
+          path: hadris
+      - name: Set hadris rust version
+        working-directory: hadris
+        env:
+          RUST_VERSION: ${{ steps.setup-rust.outputs.name }}
+        run: |
+          set -eux
+          perl -pi -e "s/^rust-version\s*=.*/rust-version = \"$RUST_VERSION\"/" Cargo.toml
+          rm rust-toolchain.toml
+          ACTUAL_RUST_VERSION="$(rustc --version | perl -nle 'print $1 if /^rustc (\S+)/')"
+          if [[ "$RUST_VERSION" != "$ACTUAL_RUST_VERSION" ]]; then
+            echo "ERROR: Expected rust version $RUST_VERSION but got $ACTUAL_RUST_VERSION."
+            exit 1
+          fi
+      - name: Set hadris version
         working-directory: hadris
         run: |
           set -eux
@@ -36,9 +48,9 @@ jobs:
           else
             VERSION="0.0.0+${GITHUB_SHA:0:7}"
           fi
-          perl -pi -e "s/^version(\.workspace)?\s*=.*/version = \"$VERSION\"/" crates/hadris-iso-cli/Cargo.toml
+          perl -pi -e "s/^version(\.workspace)?\s*=.*/version = \"$VERSION\"/" crates/tools/hadris-iso-cli/Cargo.toml
       - name: Build
-        working-directory: hadris/crates/hadris-iso-cli
+        working-directory: hadris/crates/tools/hadris-iso-cli
         run: cargo build --package hadris-iso-cli --release --target wasm32-wasip1
       - name: Archive
         uses: actions/upload-artifact@v7
@@ -50,7 +62,7 @@ jobs:
     name: Release
     permissions:
       contents: write
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs:
       - build
     steps:
