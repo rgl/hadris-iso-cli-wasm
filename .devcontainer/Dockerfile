@@ -7,16 +7,16 @@ ARG RUSTUP_INIT_VERSION='1.29.0'
 
 # see https://github.com/cargo-bins/cargo-binstall/releases
 # renovate: datasource=github-releases depName=cargo-bins/cargo-binstall
-ARG CARGO_BINSTALL_VERSION='1.21.1'
+ARG CARGO_BINSTALL_VERSION='1.22.0'
 
 # see https://github.com/rust-lang/rust/releases
 # renovate: datasource=github-tags depName=rust-lang/rust
-ARG RUST_VERSION='1.97.1'
+ARG RUST_VERSION='1.98.0'
 
 # see https://github.com/bytecodealliance/wasmtime/releases
 # see https://crates.io/crates/wasmtime-cli
 # renovate: datasource=github-releases depName=bytecodealliance/wasmtime
-ARG WASMTIME_CLI_VERSION='47.0.3'
+ARG WASMTIME_CLI_VERSION='48.0.0'
 
 # see https://github.com/wazero/wazero/releases
 # renovate: datasource=github-releases depName=wazero/wazero

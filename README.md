@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/rgl/hadris-iso-cli-wasm/actions/workflows/build.yml/badge.svg)](https://github.com/rgl/hadris-iso-cli-wasm/actions/workflows/build.yml)
 
-This builds and releases the [hadris-iso-cli application](https://github.com/hxyulin/hadris/tree/v2.0.0/crates/tools/hadris-iso-cli) as a [wasm binary](https://github.com/rgl/hadris-iso-cli-wasm/releases).
+This builds and releases the [hadris-iso-cli application](https://github.com/hxyulin/hadris/tree/v2.1.0/crates/tools/hadris-iso-cli) as a [wasm binary](https://github.com/rgl/hadris-iso-cli-wasm/releases).
 
 ## Use
 
@@ -115,7 +115,7 @@ Build:
 # checkout hadris.
 git clone https://github.com/hxyulin/hadris
 cd hadris
-git checkout v2.0.0 # 2026-08-09T03:03:36Z
+git checkout v2.1.0 # 2026-08-18T04:54:26Z
 # use the installed rust version.
 rm rust-toolchain.toml
 RUST_VERSION="$(rustc --version | perl -nle 'print $1 if /^rustc (\S+)/')"

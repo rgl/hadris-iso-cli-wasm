@@ -17,14 +17,14 @@ jobs:
         uses: dtolnay/rust-toolchain@v1
         with:
           target: wasm32-wasip1
-          toolchain: 1.97.1
+          toolchain: 1.98.0
           components: clippy, rustfmt
       - name: Checkout Hadris
         uses: actions/checkout@v7
         with:
           # see https://github.com/hxyulin/hadris/releases
           repository: hxyulin/hadris
-          ref: v2.0.0 # 2026-08-09T03:03:36Z
+          ref: v2.1.0 # 2026-08-18T04:54:26Z
           path: hadris
       - name: Set hadris rust version
         working-directory: hadris
